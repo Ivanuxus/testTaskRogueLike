@@ -5,6 +5,8 @@ class Game {
     for (let i = 0; i < 40; i++) {
       this.gameBoard[i] = new Array(24).fill(0);
     }
+    this.PlayerHealth = 70;
+    this.PlayerAttack = 10;
   }
   init() {
     $("body").append("<h1>Игровое поле</h1>");
@@ -93,8 +95,10 @@ class Game {
 
     //Placing 10 enemies in random place
     let counterOfEnemies = 0;
-    const coordXOfEnemies = [10];
-    const coordYOfEnemies = [10];
+    this.coordXOfEnemies = new Array(10);
+    this.coordYOfEnemies = new Array(10);
+    this.HpOfEnemies = new Array(10);
+    this.HpOfEnemies.fill(100, 0, 10);
     for (let j = 0; j < 40; j += 1) {
       for (let i = 0; i < 24; i += 1) {
         if (
@@ -103,8 +107,8 @@ class Game {
           this.gameBoard[j][i] == 1
         ) {
           this.gameBoard[j][i] = 2;
-          coordXOfEnemies[counterOfEnemies] = j;
-          coordYOfEnemies[counterOfEnemies] = i;
+          this.coordXOfEnemies[counterOfEnemies] = j;
+          this.coordYOfEnemies[counterOfEnemies] = i;
           counterOfEnemies += 1;
         }
       }
@@ -185,23 +189,25 @@ class Game {
           );
         }
         if (this.gameBoard[j][i] == 2) {
-          $(".field").append(
-            `<div class="tileE" style="left:${offsetLeft}px;top:${offsetTop}px"></div>`
-          );
+          for (let enemy = 0; enemy < 10; enemy++) {
+            if (
+              this.coordXOfEnemies[enemy] == j &&
+              this.coordYOfEnemies[enemy] == i
+            ) {
+              $(".field").append(
+                `<div class="tileE" style="left:${offsetLeft}px;top:${offsetTop}px"><div class="health" style="width:${this.HpOfEnemies[enemy]}%;"></div></div>`
+              );
+            }
+          }
         }
         if (this.gameBoard[j][i] == 3) {
           $(".field").append(
             `<div class="tileHP" style="left:${offsetLeft}px;top:${offsetTop}px"></div>`
           );
         }
-        if (this.gameBoard[j][i] == 4) {
-          $(".field").append(
-            `<div class="tileP" style="left:${offsetLeft}px;top:${offsetTop}px"></div>`
-          );
-        }
         if (this.playerj == j && this.playeri == i) {
           $(".field").append(
-            `<div class="tileP" style="left:${offsetLeft}px;top:${offsetTop}px"></div>`
+            `<div class="tileP" style="left:${offsetLeft}px;top:${offsetTop}px"><div class="health" style="width:${this.PlayerHealth}%;"></div></div>`
           );
         }
         if (this.gameBoard[j][i] == 5) {
@@ -239,6 +245,12 @@ class Game {
               this.gameBoard[this.playerj - 1][this.playeri] == 5)
           ) {
             this.playerj -= 1;
+            if (this.gameBoard[this.playerj][this.playeri] == 3) {
+              this.PlayerHealth += 50;
+            }
+            if (this.gameBoard[this.playerj][this.playeri] == 5) {
+              this.PlayerAttack += 20;
+            }
             this.gameBoard[this.playerj][this.playeri] = 1;
           }
           break;
@@ -250,6 +262,12 @@ class Game {
               this.gameBoard[this.playerj + 1][this.playeri] == 5)
           ) {
             this.playerj += 1;
+            if (this.gameBoard[this.playerj][this.playeri] == 3) {
+              this.PlayerHealth += 50;
+            }
+            if (this.gameBoard[this.playerj][this.playeri] == 5) {
+              this.PlayerAttack += 20;
+            }
             this.gameBoard[this.playerj][this.playeri] = 1;
           }
           break;
@@ -261,6 +279,12 @@ class Game {
               this.gameBoard[this.playerj][this.playeri - 1] == 5)
           ) {
             this.playeri -= 1;
+            if (this.gameBoard[this.playerj][this.playeri] == 3) {
+              this.PlayerHealth += 50;
+            }
+            if (this.gameBoard[this.playerj][this.playeri] == 5) {
+              this.PlayerAttack += 20;
+            }
             this.gameBoard[this.playerj][this.playeri] = 1;
           }
           break;
@@ -272,16 +296,22 @@ class Game {
               this.gameBoard[this.playerj][this.playeri + 1] == 5)
           ) {
             this.playeri += 1;
+            if (this.gameBoard[this.playerj][this.playeri] == 3) {
+              this.PlayerHealth += 50;
+            }
+            if (this.gameBoard[this.playerj][this.playeri] == 5) {
+              this.PlayerAttack += 20;
+            }
             this.gameBoard[this.playerj][this.playeri] = 1;
           }
           break;
       }
+      switch (e.code) {
+        case "Space":
+          console.log("attack");
+          break;
+      }
       this.redraw();
     });
-  }
-  clear() {
-    $(".field").append(
-      `<div class="tile" style="left:${offsetLeft}px;top:${offsetTop}px"></div>`
-    );
   }
 }
