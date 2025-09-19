@@ -22,7 +22,6 @@ class Game {
 
     let playerExist = false;
 
-    //Placing walls everywhere
     for (let j = 0; j < 40; j += 1) {
       for (let i = 0; i < 24; i += 1) {
         this.gameBoard[j][i] = 6;
@@ -32,7 +31,6 @@ class Game {
     let countOfVert = Math.floor(Math.random() * 3) + 3;
     let countOfHorizont = Math.floor(Math.random() * 3) + 3;
 
-    //Generating Horizontal Tunnels
     let counter = 0;
     const filled = [];
     while (counter < countOfHorizont) {
@@ -55,7 +53,6 @@ class Game {
       }
     }
 
-    //Generating Vertical Tunnels
     counter = 0;
     filled.length = 0;
     while (counter < countOfVert) {
@@ -78,7 +75,6 @@ class Game {
       }
     }
 
-    //Placing a player in random place
     for (let j = 0; j < 40; j += 1) {
       for (let i = 0; i < 24; i += 1) {
         if (
@@ -93,7 +89,6 @@ class Game {
       }
     }
 
-    //Placing 10 enemies in random place
     let counterOfEnemies = 0;
     this.coordXOfEnemies = new Array(10);
     this.coordYOfEnemies = new Array(10);
@@ -112,7 +107,7 @@ class Game {
         }
       }
     }
-    //placing 10 HP in radom place
+
     let counterOfHP = 0;
     const coordXOfHP = [10];
     const coordYOfHP = [10];
@@ -130,7 +125,7 @@ class Game {
         }
       }
     }
-    //placing 2 sw in radom place
+
     let counterOfSw = 0;
     const coordXOfSw = [10];
     const coordYOfSw = [10];
@@ -148,7 +143,7 @@ class Game {
         }
       }
     }
-    //placing &numberOfRooms in random place
+
     let numberOfRooms = Math.floor(Math.random() * 5) + 5;
     let counterOfRooms = 0;
     while (counterOfRooms < numberOfRooms) {
@@ -345,44 +340,59 @@ class Game {
       }
     } else if (typeOfEvent == 2) {
       for (let enemy = 0; enemy < 10; enemy++) {
-        if (directionConsidered == 0) {
-          if (
-            this.coordXOfEnemies[enemy] + 1 < 40 &&
-            this.gameBoard[this.coordXOfEnemies[enemy] + 1][
-              this.coordYOfEnemies[enemy]
-            ] == 1
-          ) {
-            this.coordXOfEnemies[enemy] += 1;
-          }
+        let direction = [100];
+        if (this.coordXOfEnemies[enemy] < this.playerj) {
+          direction.push(0);
         }
-        if (directionConsidered == 1) {
-          if (
-            this.coordXOfEnemies[enemy] - 1 > 0 &&
-            this.gameBoard[this.coordXOfEnemies[enemy] - 1][
-              this.coordYOfEnemies[enemy]
-            ] == 1
-          ) {
-            this.coordXOfEnemies[enemy] -= 1;
-          }
+        if (this.coordXOfEnemies[enemy] > this.playerj) {
+          direction.push(1);
         }
-        if (directionConsidered == 2) {
-          if (
-            this.coordYOfEnemies[enemy] + 1 < 24 &&
-            this.gameBoard[this.coordXOfEnemies[enemy]][
-              this.coordYOfEnemies[enemy] + 1
-            ] == 1
-          ) {
-            this.coordYOfEnemies[enemy] += 1;
-          }
+        if (this.coordYOfEnemies[enemy] < this.playeri) {
+          direction.push(2);
         }
-        if (directionConsidered == 3) {
-          if (
-            this.coordYOfEnemies[enemy] - 1 > 0 &&
-            this.gameBoard[this.coordXOfEnemies[enemy]][
-              this.coordYOfEnemies[enemy] - 1
-            ] == 1
-          ) {
-            this.coordYOfEnemies[enemy] -= 1;
+        if (this.coordYOfEnemies[enemy] > this.playeri) {
+          direction.push(3);
+        }
+        for (let directionn = 0; directionn < direction.length; directionn++) {
+          if (direction[directionn] == 0) {
+            if (
+              this.coordXOfEnemies[enemy] + 1 < 40 &&
+              this.gameBoard[this.coordXOfEnemies[enemy] + 1][
+                this.coordYOfEnemies[enemy]
+              ] == 1
+            ) {
+              this.coordXOfEnemies[enemy] += 1;
+            }
+          }
+          if (direction[directionn] == 1) {
+            if (
+              this.coordXOfEnemies[enemy] - 1 > 0 &&
+              this.gameBoard[this.coordXOfEnemies[enemy] - 1][
+                this.coordYOfEnemies[enemy]
+              ] == 1
+            ) {
+              this.coordXOfEnemies[enemy] -= 1;
+            }
+          }
+          if (direction[directionn] == 2) {
+            if (
+              this.coordYOfEnemies[enemy] + 1 < 24 &&
+              this.gameBoard[this.coordXOfEnemies[enemy]][
+                this.coordYOfEnemies[enemy] + 1
+              ] == 1
+            ) {
+              this.coordYOfEnemies[enemy] += 1;
+            }
+          }
+          if (direction[directionn] == 3) {
+            if (
+              this.coordYOfEnemies[enemy] - 1 > 0 &&
+              this.gameBoard[this.coordXOfEnemies[enemy]][
+                this.coordYOfEnemies[enemy] - 1
+              ] == 1
+            ) {
+              this.coordYOfEnemies[enemy] -= 1;
+            }
           }
         }
       }
