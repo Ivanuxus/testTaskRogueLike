@@ -7,6 +7,7 @@ class Game {
     }
     this.PlayerHealth = 70;
     this.PlayerAttack = 10;
+    this.enemyMoveDelay = 3000;
   }
   init() {
     $("body").append("<h1>Игровое поле</h1>");
@@ -160,7 +161,7 @@ class Game {
       }
       counterOfRooms++;
     }
-
+    this.startEnemyMovement();
     this.redraw();
   }
   //Meaning the number in matrice
@@ -223,7 +224,6 @@ class Game {
 
   redraw() {
     $(".field").empty();
-    this.LogicOfEnemy(2, 1);
     this.draw();
 
     for (let enemy = 0; enemy < 10; enemy++) {
@@ -396,6 +396,19 @@ class Game {
           }
         }
       }
+    }
+  }
+
+  startEnemyMovement() {
+    this.enemyMoveInterval = setInterval(() => {
+      this.LogicOfEnemy(2, 1);
+      this.redraw();
+    }, this.enemyMoveDelay);
+  }
+  stopEnemyMovement() {
+    if (this.enemyMoveInterval) {
+      clearInterval(this.enemyMoveInterval);
+      this.enemyMoveInterval = null;
     }
   }
   move() {
