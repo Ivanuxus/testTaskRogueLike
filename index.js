@@ -106,7 +106,6 @@ class Game {
           counterOfEnemies < 10 &&
           this.gameBoard[j][i] == 1
         ) {
-          this.gameBoard[j][i] = 2;
           this.coordXOfEnemies[counterOfEnemies] = j;
           this.coordYOfEnemies[counterOfEnemies] = i;
           counterOfEnemies += 1;
@@ -188,18 +187,18 @@ class Game {
             `<div class="tile" style="left:${offsetLeft}px;top:${offsetTop}px"></div>`
           );
         }
-        if (this.gameBoard[j][i] == 2) {
-          for (let enemy = 0; enemy < 10; enemy++) {
-            if (
-              this.coordXOfEnemies[enemy] == j &&
-              this.coordYOfEnemies[enemy] == i
-            ) {
-              $(".field").append(
-                `<div class="tileE" style="left:${offsetLeft}px;top:${offsetTop}px"><div class="health" style="width:${this.HpOfEnemies[enemy]}%;"></div></div>`
-              );
-            }
+
+        for (let enemy = 0; enemy < 10; enemy++) {
+          if (
+            this.coordXOfEnemies[enemy] == j &&
+            this.coordYOfEnemies[enemy] == i
+          ) {
+            $(".field").append(
+              `<div class="tileE" style="left:${offsetLeft}px;top:${offsetTop}px"><div class="health" style="width:${this.HpOfEnemies[enemy]}%;"></div></div>`
+            );
           }
         }
+
         if (this.gameBoard[j][i] == 3) {
           $(".field").append(
             `<div class="tileHP" style="left:${offsetLeft}px;top:${offsetTop}px"></div>`
@@ -229,9 +228,166 @@ class Game {
 
   redraw() {
     $(".field").empty();
+    this.LogicOfEnemy(2, 1);
     this.draw();
+
+    for (let enemy = 0; enemy < 10; enemy++) {
+      if (
+        (this.coordXOfEnemies[enemy] == this.playerj + 1 &&
+          this.coordYOfEnemies[enemy] == this.playeri) ||
+        (this.coordXOfEnemies[enemy] == this.playerj - 1 &&
+          this.coordYOfEnemies[enemy] == this.playeri) ||
+        (this.coordXOfEnemies[enemy] == this.playerj &&
+          this.coordYOfEnemies[enemy] == this.playeri + 1) ||
+        (this.coordXOfEnemies[enemy] == this.playerj &&
+          this.coordYOfEnemies[enemy] == this.playeri - 1) ||
+        (this.coordXOfEnemies[enemy] == this.playerj + 1 &&
+          this.coordYOfEnemies[enemy] == this.playeri + 1) ||
+        (this.coordXOfEnemies[enemy] == this.playerj + 1 &&
+          this.coordYOfEnemies[enemy] == this.playeri - 1) ||
+        (this.coordXOfEnemies[enemy] == this.playerj - 1 &&
+          this.coordYOfEnemies[enemy] == this.playeri - 1) ||
+        (this.coordXOfEnemies[enemy] == this.playerj - 1 &&
+          this.coordYOfEnemies[enemy] == this.playeri + 1)
+      ) {
+        this.PlayerHealth -= 25;
+      }
+    }
   }
 
+  LogicOfEnemy(typeOfEvent, directionConsidered) {
+    if (typeOfEvent == 0) {
+      for (let enemy = 0; enemy < 10; enemy++) {
+        let direction = Math.floor(Math.random() * 4);
+        if (direction == 0) {
+          if (
+            this.coordXOfEnemies[enemy] + 1 < 40 &&
+            this.gameBoard[this.coordXOfEnemies[enemy] + 1][
+              this.coordYOfEnemies[enemy]
+            ] == 1
+          ) {
+            this.coordXOfEnemies[enemy] += 1;
+          }
+        }
+        if (direction == 1) {
+          if (
+            this.coordXOfEnemies[enemy] - 1 > 0 &&
+            this.gameBoard[this.coordXOfEnemies[enemy] - 1][
+              this.coordYOfEnemies[enemy]
+            ] == 1
+          ) {
+            this.coordXOfEnemies[enemy] -= 1;
+          }
+        }
+        if (direction == 2) {
+          if (
+            this.coordYOfEnemies[enemy] + 1 < 24 &&
+            this.gameBoard[this.coordXOfEnemies[enemy]][
+              this.coordYOfEnemies[enemy] + 1
+            ] == 1
+          ) {
+            this.coordYOfEnemies[enemy] += 1;
+          }
+        }
+        if (direction == 3) {
+          if (
+            this.coordYOfEnemies[enemy] - 1 > 0 &&
+            this.gameBoard[this.coordXOfEnemies[enemy]][
+              this.coordYOfEnemies[enemy] - 1
+            ] == 1
+          ) {
+            this.coordYOfEnemies[enemy] -= 1;
+          }
+        }
+      }
+    } else if (typeOfEvent == 1) {
+      for (let enemy = 0; enemy < 10; enemy++) {
+        if (directionConsidered == 0) {
+          if (
+            this.coordXOfEnemies[enemy] + 1 < 40 &&
+            this.gameBoard[this.coordXOfEnemies[enemy] + 1][
+              this.coordYOfEnemies[enemy]
+            ] == 1
+          ) {
+            this.coordXOfEnemies[enemy] += 1;
+          }
+        }
+        if (directionConsidered == 1) {
+          if (
+            this.coordXOfEnemies[enemy] - 1 > 0 &&
+            this.gameBoard[this.coordXOfEnemies[enemy] - 1][
+              this.coordYOfEnemies[enemy]
+            ] == 1
+          ) {
+            this.coordXOfEnemies[enemy] -= 1;
+          }
+        }
+        if (directionConsidered == 2) {
+          if (
+            this.coordYOfEnemies[enemy] + 1 < 24 &&
+            this.gameBoard[this.coordXOfEnemies[enemy]][
+              this.coordYOfEnemies[enemy] + 1
+            ] == 1
+          ) {
+            this.coordYOfEnemies[enemy] += 1;
+          }
+        }
+        if (directionConsidered == 3) {
+          if (
+            this.coordYOfEnemies[enemy] - 1 > 0 &&
+            this.gameBoard[this.coordXOfEnemies[enemy]][
+              this.coordYOfEnemies[enemy] - 1
+            ] == 1
+          ) {
+            this.coordYOfEnemies[enemy] -= 1;
+          }
+        }
+      }
+    } else if (typeOfEvent == 2) {
+      for (let enemy = 0; enemy < 10; enemy++) {
+        if (directionConsidered == 0) {
+          if (
+            this.coordXOfEnemies[enemy] + 1 < 40 &&
+            this.gameBoard[this.coordXOfEnemies[enemy] + 1][
+              this.coordYOfEnemies[enemy]
+            ] == 1
+          ) {
+            this.coordXOfEnemies[enemy] += 1;
+          }
+        }
+        if (directionConsidered == 1) {
+          if (
+            this.coordXOfEnemies[enemy] - 1 > 0 &&
+            this.gameBoard[this.coordXOfEnemies[enemy] - 1][
+              this.coordYOfEnemies[enemy]
+            ] == 1
+          ) {
+            this.coordXOfEnemies[enemy] -= 1;
+          }
+        }
+        if (directionConsidered == 2) {
+          if (
+            this.coordYOfEnemies[enemy] + 1 < 24 &&
+            this.gameBoard[this.coordXOfEnemies[enemy]][
+              this.coordYOfEnemies[enemy] + 1
+            ] == 1
+          ) {
+            this.coordYOfEnemies[enemy] += 1;
+          }
+        }
+        if (directionConsidered == 3) {
+          if (
+            this.coordYOfEnemies[enemy] - 1 > 0 &&
+            this.gameBoard[this.coordXOfEnemies[enemy]][
+              this.coordYOfEnemies[enemy] - 1
+            ] == 1
+          ) {
+            this.coordYOfEnemies[enemy] -= 1;
+          }
+        }
+      }
+    }
+  }
   move() {
     let player = $(".field .tileP");
     let movePlayer = 10;
@@ -308,7 +464,29 @@ class Game {
       }
       switch (e.code) {
         case "Space":
-          console.log("attack");
+          for (let enemy = 0; enemy < 10; enemy++) {
+            if (
+              (this.coordXOfEnemies[enemy] == this.playerj + 1 &&
+                this.coordYOfEnemies[enemy] == this.playeri) ||
+              (this.coordXOfEnemies[enemy] == this.playerj - 1 &&
+                this.coordYOfEnemies[enemy] == this.playeri) ||
+              (this.coordXOfEnemies[enemy] == this.playerj &&
+                this.coordYOfEnemies[enemy] == this.playeri + 1) ||
+              (this.coordXOfEnemies[enemy] == this.playerj &&
+                this.coordYOfEnemies[enemy] == this.playeri - 1) ||
+              (this.coordXOfEnemies[enemy] == this.playerj + 1 &&
+                this.coordYOfEnemies[enemy] == this.playeri + 1) ||
+              (this.coordXOfEnemies[enemy] == this.playerj + 1 &&
+                this.coordYOfEnemies[enemy] == this.playeri - 1) ||
+              (this.coordXOfEnemies[enemy] == this.playerj - 1 &&
+                this.coordYOfEnemies[enemy] == this.playeri - 1) ||
+              (this.coordXOfEnemies[enemy] == this.playerj - 1 &&
+                this.coordYOfEnemies[enemy] == this.playeri + 1)
+            ) {
+              this.HpOfEnemies[enemy] -= 25;
+            }
+          }
+
           break;
       }
       this.redraw();
